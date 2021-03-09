@@ -9,3 +9,5 @@ mongoose.connect("mongodb://localhost:27017/userManagement", {
 }).catch((err)=>{
     console.log(`error in connection ${err}`)
 })
+
+

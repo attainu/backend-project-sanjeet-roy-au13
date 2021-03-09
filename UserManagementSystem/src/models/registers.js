@@ -36,6 +36,12 @@ const employeeSchema = new mongoose.Schema({
     confirmpassword: {
         type:String,
         required:true
+    }, 
+    mobile: {
+        type: String
+    },
+    city: {
+        type: String
     },
     tokens:[{
         token:{
@@ -45,6 +51,10 @@ const employeeSchema = new mongoose.Schema({
     }]
     
 })
+
+
+const Register = new mongoose.model("Register", employeeSchema);
+const Employee = new mongoose.model("Employee", employeeSchema);
 
 // generating tokens 
 employeeSchema.methods.generateAuthToken = async function(){
@@ -72,8 +82,11 @@ employeeSchema.pre("save", async function(next) {
 } )
 
 
-// now we need to create a collections
 
-const Register = new mongoose.model("Register", employeeSchema);
+
+
+
+
 
 module.exports = Register;
+module.exports = Employee;

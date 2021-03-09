@@ -4,9 +4,10 @@ const app = express();
 const hbs = require("hbs");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
 require("./db/conn");
+const employeeController = require('../controllers/employeeController');
 const Register = require("./models/registers");
+const User = require("./models/registers");
 const { json } = require("express");
 const { log } = require("console");
 
@@ -153,8 +154,9 @@ app.post("/login/delete",async(req,res)=>{
 }
 
 })
-
+app.use('/employee', employeeController);
 app.listen(port, () => {
     console.log(`server is running at port no ${port}`);
 })
+
 

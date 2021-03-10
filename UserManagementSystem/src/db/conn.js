@@ -1,6 +1,6 @@
 const mongoose=require('mongoose')
 
-mongoose.connect("mongodb://localhost:27017/userManagement", {
+mongoose.connect("mongodb+srv://admin:sanchit111...@cluster0.hgdc9.mongodb.net/Registration?retryWrites=true&w=majority",{
     useNewUrlParser:true,
     useUnifiedTopology:true,
     useCreateIndex:true
@@ -9,5 +9,3 @@ mongoose.connect("mongodb://localhost:27017/userManagement", {
 }).catch((err)=>{
     console.log(`error in connection ${err}`)
 })
-
-

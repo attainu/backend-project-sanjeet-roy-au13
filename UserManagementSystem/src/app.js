@@ -2,6 +2,7 @@ const employeeController = require("../controllers/employeeController.js");
 const exphbs = require("express-handlebars");
 var nodemailer = require("nodemailer");
 
+
 const express = require("express");
 const path = require("path");
 const app = express();
@@ -41,6 +42,14 @@ app.get("/register", (req, res) => {
 app.get("/login", (req, res) => {
   res.render("login");
 });
+
+app.get('/admin', (req, res) => {
+  register.find({}, function(err, movies) {
+      res.render('admin', {
+          registerList: registers
+      })
+  })
+})
 
 // create a new user in our database
 app.post("/register", async (req, res) => {

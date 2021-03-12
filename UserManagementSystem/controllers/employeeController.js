@@ -27,11 +27,6 @@ router.get("/", (req, res) => {
   });
 });
 
-router.get("/admin", (req, res) => {
-    res.render("adminaddOrEdit", {
-    viewTitle: "Insert Employee",
-  });
-});
 
 //user
 router.post("/", (req, res) => {
@@ -80,52 +75,7 @@ function updateRecord(req, res) {
   );
 }
 
-// Admin Update
-router.post("/admin", (req, res) => {
-  if (req.body._id == "") insertRecord(req, res);
-  else updateRecord(req, res);
-});
 
-function insertRecord(req, res) {
-  var employee = new Employee();
-  employee.fullName = req.body.fullName;
-  employee.email = req.body.email;
-  employee.mobile = req.body.mobile;
-  employee.city = req.body.city;
-  employee.save((err, doc) => {
-    if (!err) res.redirect("/employee/list/admin");
-    else {
-      if (err.name == "ValidationError") {
-        handleValidationError(err, req.body);
-        res.render("adminaddOrEdit", {
-          viewTitle: "Insert Employee",
-          employee: req.body,
-        });
-      } else console.log("Error during record insertion : " + err);
-    }
-  });
-}
-
-function updateRecord(req, res) {
-  Employee.findOneAndUpdate(
-    { _id: req.body._id },
-    req.body,
-    { new: true },
-    (err, doc) => {
-      if (!err) {
-        res.redirect("/employee/list/admin");
-      } else {
-        if (err.name == "ValidationError") {
-          handleValidationError(err, req.body);
-          res.render("adminaddOrEdit", {
-            viewTitle: "Update Employee",
-            employee: req.body,
-          });
-        } else console.log("Error during record update : " + err);
-      }
-    }
-  );
-}
 
 //user list
 router.get("/list", (req, res) => {
@@ -154,6 +104,34 @@ function handleValidationError(err, body) {
     }
   }
 }
+// admin
+router.get("/admin", (req, res) => {
+  Employee.find((err, docs) => {
+    if (!err) {
+      res.render("adminlist", {
+        list: docs,
+      });
+    } else {
+      console.log("Error in retrieving employee list :" + err);
+    }
+  });
+});
+
+function handleValidationError(err, body) {
+  for (field in err.errors) {
+    switch (err.errors[field].path) {
+      case "fullName":
+        body["fullNameError"] = err.errors[field].message;
+        break;
+      case "email":
+        body["emailError"] = err.errors[field].message;
+        break;
+      default:
+        break;
+    }
+  }
+}
+
 
 router.post("/list", (req, res) => {
   Employee.find((err, docs) => {
@@ -167,76 +145,6 @@ router.post("/list", (req, res) => {
   });
 });
 
-function handleValidationError(err, body) {
-  for (field in err.errors) {
-    switch (err.errors[field].path) {
-      case "fullName":
-        body["fullNameError"] = err.errors[field].message;
-        break;
-      case "email":
-        body["emailError"] = err.errors[field].message;
-        break;
-      default:
-        break;
-    }
-  }
-}
-
-
-//Admin List
-router.get("/list/admin", (req, res) => {
-  Employee.find((err, docs) => {
-    if (!err) {
-      res.render("adminlist", {
-        list: docs,
-      });
-    } else {
-      console.log("Error in retrieving employee list :" + err);
-    }
-  });
-});
-
-function handleValidationError(err, body) {
-  for (field in err.errors) {
-    switch (err.errors[field].path) {
-      case "fullName":
-        body["fullNameError"] = err.errors[field].message;
-        break;
-      case "email":
-        body["emailError"] = err.errors[field].message;
-        break;
-      default:
-        break;
-    }
-  }
-}
-
-router.post("/list/admin", (req, res) => {
-  Employee.find((err, docs) => {
-    if (!err) {
-      res.render("adminlist", {
-        list: docs,
-      });
-    } else {
-      console.log("Error in retrieving employee list :" + err);
-    }
-  });
-});
-
-function handleValidationError(err, body) {
-  for (field in err.errors) {
-    switch (err.errors[field].path) {
-      case "fullName":
-        body["fullNameError"] = err.errors[field].message;
-        break;
-      case "email":
-        body["emailError"] = err.errors[field].message;
-        break;
-      default:
-        break;
-    }
-  }
-}
 
 router.get("/:id", (req, res) => {
   Employee.findById(req.params.id, (err, doc) => {
@@ -249,22 +157,12 @@ router.get("/:id", (req, res) => {
   });
 });
 
-router.get("/admin/:id", (req, res) => {
-  Employee.findById(req.params.id, (err, doc) => {
-    if (!err) {
-      res.render("adminaddOrEdit", {
-        viewTitle: "Update Employee",
-        employee: doc,
-      });
-    }
-  });
-});
 
 
 router.get('/delete/:id', (req, res) => {
   Employee.findByIdAndRemove(req.params.id, (err, doc) => {
       if (!err) {
-          res.redirect("/employee/list/admin");
+          res.redirect("/employee/list");
       }
       else { console.log('Error in employee delete :' + err); }
   });

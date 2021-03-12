@@ -2,7 +2,7 @@
     <div class="col-md-6 offset-md-3" style="background-color: rgb(239, 244, 247);margin-top: 25px;padding:20px;">
         {{>mainLayout}}
     <h3>{{viewTitle}}</h3>
-    <form action="/employee/list" method="POST" autocomplete="off">
+    <form action="/employee" method="POST" autocomplete="off">
         <input type="hidden" name="_id" value="{{employee._id}}">
         <div class="form-group">
             <label>Full Name</label>
